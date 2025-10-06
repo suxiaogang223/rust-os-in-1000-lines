@@ -1,0 +1,22 @@
+[package]
+name = "rust-os-in-1000"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "kernel"
+path = "src/main.rs"
+
+[dependencies]
+# 无标准库依赖，使用no_std
+
+[profile.release]
+opt-level = "s"   # 优化大小
+lto = true        # 链接时优化
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = "s"
+
+# 目标配置在.cargo/config.toml中定义
