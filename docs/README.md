@@ -1,6 +1,32 @@
-# Rust OS in 1000 Lines - 教程
+# 🦀 Rust OS in 1000 Lines
 
-一个用Rust语言实现的1000行代码操作系统教程，参考了[《1000行代码的操作系统》](https://operating-system-in-1000-lines.vercel.app/zh/)教程。
+<div align="center">
+
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
+![RISC-V](https://img.shields.io/badge/RISC--V-000000?style=for-the-badge&logo=risc-v&logoColor=white)
+![QEMU](https://img.shields.io/badge/QEMU-000000?style=for-the-badge&logo=qemu&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-000000?style=for-the-badge&logo=github&logoColor=white)
+
+**一个用Rust语言实现的1000行代码操作系统教程**
+
+*参考了[《1000行代码的操作系统》](https://operating-system-in-1000-lines.vercel.app/zh/)教程*
+
+[![开始学习](https://img.shields.io/badge/开始学习-第01章-blue?style=for-the-badge&logo=book&logoColor=white)](01_environment_setup.md)
+[![GitHub仓库](https://img.shields.io/badge/GitHub-仓库-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/your-username/rust-os-in-1000-lines)
+
+</div>
+
+---
+
+## 🎯 项目简介
+
+这是一个完整的Rust操作系统教程，用1000行代码实现了一个功能完整的操作系统内核。通过学习本教程，你将掌握：
+
+- **Rust系统编程** - 在no_std环境中开发
+- **操作系统原理** - 内核、进程、内存管理
+- **RISC-V架构** - 寄存器、异常、中断
+- **设备驱动** - UART、磁盘、文件系统
+- **系统调用** - 用户态与内核态交互
 
 ## 📚 教程目录
 
@@ -71,53 +97,128 @@
 
 ## 🚀 快速开始
 
-1. **环境准备**
-   ```bash
-   # 安装Rust
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-   
-   # 安装QEMU
-   brew install qemu  # macOS
-   # 或
-   sudo apt install qemu-system-misc  # Ubuntu
-   ```
+### 1. 环境准备
 
-2. **克隆项目**
-   ```bash
-   git clone <your-repo-url>
-   cd rust-os-in-1000-lines
-   ```
+**macOS用户:**
+```bash
+# 安装Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
 
-3. **运行测试**
-   ```bash
-   ./test.sh
-   ```
+# 安装QEMU
+brew install qemu
 
-4. **启动系统**
-   ```bash
-   ./run.sh
-   ```
+# 添加RISC-V目标
+rustup target add riscv64gc-unknown-none-elf
+```
 
-## 🛠️ 开发工具
+**Linux用户:**
+```bash
+# 安装Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
 
-- **Rust工具链**: 1.70+
-- **QEMU模拟器**: 支持RISC-V64
-- **目标架构**: riscv64gc-unknown-none-elf
+# 安装QEMU
+sudo apt update
+sudo apt install qemu-system-misc
+
+# 添加RISC-V目标
+rustup target add riscv64gc-unknown-none-elf
+```
+
+### 2. 克隆项目
+```bash
+git clone https://github.com/your-username/rust-os-in-1000-lines.git
+cd rust-os-in-1000-lines
+```
+
+### 3. 运行测试
+```bash
+./test.sh
+```
+
+### 4. 启动系统
+```bash
+./run.sh
+```
+
+### 5. 本地预览教程
+```bash
+cd docs
+mdbook serve
+# 访问 http://localhost:3000
+```
+
+## 🛠️ 技术栈
+
+| 技术 | 版本 | 描述 |
+|------|------|------|
+| **Rust** | 1.70+ | 系统编程语言 |
+| **RISC-V** | 64位 | 开源指令集架构 |
+| **QEMU** | 最新 | 硬件模拟器 |
+| **mdBook** | 0.4+ | 文档生成器 |
+| **GitHub Pages** | - | 静态网站托管 |
 
 ## 📖 学习目标
 
 通过本教程，你将学会：
 
-1. **Rust系统编程** - 在no_std环境中开发
-2. **操作系统原理** - 内核、进程、内存管理
-3. **RISC-V架构** - 寄存器、异常、中断
-4. **设备驱动** - UART、磁盘、文件系统
-5. **系统调用** - 用户态与内核态交互
+- 🦀 **Rust系统编程** - 在no_std环境中开发
+- 🖥️ **操作系统原理** - 内核、进程、内存管理
+- 🔧 **RISC-V架构** - 寄存器、异常、中断
+- 💾 **设备驱动** - UART、磁盘、文件系统
+- 🔄 **系统调用** - 用户态与内核态交互
 
-## 🤝 贡献
+## 🌟 项目特色
 
-欢迎提交Issue和Pull Request来改进教程！
+- ✅ **完整实现** - 从引导到用户程序的完整OS
+- ✅ **现代语言** - 使用Rust的安全特性
+- ✅ **开源架构** - 基于RISC-V开源指令集
+- ✅ **详细教程** - 13个章节的完整学习路径
+- ✅ **在线访问** - 通过GitHub Pages部署
+- ✅ **中文友好** - 适合中文读者学习
+
+## 📊 项目统计
+
+![代码行数](https://img.shields.io/badge/代码行数-1000+-blue?style=flat-square)
+![章节数量](https://img.shields.io/badge/章节数量-13-green?style=flat-square)
+![支持架构](https://img.shields.io/badge/支持架构-RISC--V64-orange?style=flat-square)
+![许可证](https://img.shields.io/badge/许可证-MIT-green?style=flat-square)
+
+## 🤝 贡献指南
+
+我们欢迎各种形式的贡献！
+
+### 贡献方式
+- 🐛 **报告Bug** - 通过GitHub Issues
+- 💡 **功能建议** - 提出新功能想法
+- 📝 **文档改进** - 完善教程内容
+- 🔧 **代码贡献** - 提交Pull Request
+
+### 开发流程
+1. Fork项目
+2. 创建功能分支
+3. 提交更改
+4. 创建Pull Request
+
+## 📚 相关资源
+
+- [原版教程](https://operating-system-in-1000-lines.vercel.app/zh/) - C语言版本
+- [Rust官方文档](https://doc.rust-lang.org/) - Rust学习资源
+- [RISC-V规范](https://riscv.org/technical/specifications/) - 架构文档
+- [QEMU文档](https://qemu.readthedocs.io/) - 模拟器文档
 
 ## 📄 许可证
 
-MIT License
+本项目采用 [MIT License](LICENSE) 许可证。
+
+---
+
+<div align="center">
+
+**⭐ 如果这个项目对你有帮助，请给个Star！**
+
+[![GitHub stars](https://img.shields.io/github/stars/your-username/rust-os-in-1000-lines?style=social)](https://github.com/your-username/rust-os-in-1000-lines)
+[![GitHub forks](https://img.shields.io/github/forks/your-username/rust-os-in-1000-lines?style=social)](https://github.com/your-username/rust-os-in-1000-lines)
+
+</div>
