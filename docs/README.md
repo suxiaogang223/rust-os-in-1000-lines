@@ -2,21 +2,11 @@
 
 <div align="center">
 
-![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
-![RISC-V](https://img.shields.io/badge/RISC--V-000000?style=for-the-badge&logo=risc-v&logoColor=white)
-![QEMU](https://img.shields.io/badge/QEMU-000000?style=for-the-badge&logo=qemu&logoColor=white)
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-000000?style=for-the-badge&logo=github&logoColor=white)
-
 **一个用Rust语言实现的1000行代码操作系统教程**
 
 *参考了[《1000行代码的操作系统》](https://operating-system-in-1000-lines.vercel.app/zh/)教程*
 
-[![开始学习](https://img.shields.io/badge/开始学习-第01章-blue?style=for-the-badge&logo=book&logoColor=white)](01_environment_setup.md)
-[![GitHub仓库](https://img.shields.io/badge/GitHub-仓库-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/your-username/rust-os-in-1000-lines)
-
 </div>
-
----
 
 ## 🎯 项目简介
 
@@ -218,7 +208,7 @@ mdbook serve
 
 **⭐ 如果这个项目对你有帮助，请给个Star！**
 
-[![GitHub stars](https://img.shields.io/github/stars/your-username/rust-os-in-1000-lines?style=social)](https://github.com/your-username/rust-os-in-1000-lines)
-[![GitHub forks](https://img.shields.io/github/forks/your-username/rust-os-in-1000-lines?style=social)](https://github.com/your-username/rust-os-in-1000-lines)
+[![GitHub stars](https://img.shields.io/github/stars/suxiaogang223/rust-os-in-1000-lines?style=social)](https://github.com/suxiaogang223/rust-os-in-1000-lines)
+[![GitHub forks](https://img.shields.io/github/forks/suxiaogang223/rust-os-in-1000-lines?style=social)](https://github.com/suxiaogang223/rust-os-in-1000-lines)
 
 </div>
