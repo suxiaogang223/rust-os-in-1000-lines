@@ -14,6 +14,11 @@ Top-level build/runtime assets include `Makefile`, `linker.ld`, `.cargo/config.t
 - `make fmt`, `make clippy`, `make check`: fast formatting/lint/type-check loop.
 - `cd docs && mdbook serve`: preview docs locally; `mdbook build` creates static output.
 
+## Sandbox & Elevation
+- In restricted sandbox environments (such as Codex CLI), `make build` usually works without elevation.
+- `make debug` requires elevated permissions because QEMU `-s` must bind the GDB stub port (`:1234`).
+- `make run` may require elevation in restricted environments if QEMU/device access is sandbox-blocked.
+
 ## Coding Style & Naming Conventions
 Use Rust 2021 and keep code `no_std` friendly. Format with `cargo fmt` (4-space indentation, no tabs). Use `snake_case` for files/modules/functions, `CamelCase` for types, and `SCREAMING_SNAKE_CASE` for constants (especially MMIO addresses and bit masks). Keep `unsafe` blocks minimal and close to hardware access; add short invariants/comments when safety is non-obvious.
 
