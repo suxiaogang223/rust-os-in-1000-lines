@@ -17,14 +17,24 @@ src/
 │   └── riscv.rs       # RISC-V架构支持
 ├── common/            # 通用工具
 │   ├── mod.rs
-│   └── types.rs       # 类型定义
+│   ├── string.rs
+│   └── types.rs
 ├── drivers/           # 设备驱动
 │   ├── mod.rs
-│   └── uart.rs        # UART驱动
+│   ├── uart.rs        # UART驱动
+│   └── disk.rs        # 磁盘驱动（教学骨架）
 └── kernel/            # 内核核心
-    ├── mod.rs
-    └── init.rs        # 内核初始化
+    ├── mod.rs         # kernel::init() 初始化入口
+    ├── exception.rs   # 异常/中断处理
+    ├── memory.rs      # 内存分配（bump allocator）
+    ├── process.rs     # 进程与调度（教学骨架）
+    ├── paging.rs      # 分页/页表（教学骨架）
+    ├── usermode.rs    # 用户态切换（教学骨架）
+    ├── syscall.rs     # 系统调用分发（教学骨架）
+    └── conclusion.rs  # 结语输出
 ```
+
+更完整的仓库布局说明请参考上一节：[项目结构](./01_project_structure.md)。
 
 ## 内核入口点 (src/main.rs)
 
@@ -91,128 +101,14 @@ pub fn init() {
 
 ## RISC-V架构支持 (src/arch/riscv.rs)
 
-```rust
-// RISC-V架构相关函数和常量
+本仓库把 RISC-V 相关的常量与 CSR 读写封装在 `src/arch/riscv.rs`。
 
-// 控制状态寄存器地址
-const MSTATUS: usize = 0x300;
-const MIE: usize = 0x304;
-const MTVEC: usize = 0x305;
-const MEPC: usize = 0x341;
-const MCAUSE: usize = 0x342;
-const MTVAL: usize = 0x343;
+它主要用于后续章节的：
 
-// 读取控制状态寄存器
-#[inline(always)]
-pub fn read_csr(csr: usize) -> usize {
-    let value: usize;
-    unsafe {
-        asm!("csrr {}, {}", out(reg) value, const csr);
-    }
-    value
-}
+- 异常/中断处理（`mtvec/mepc/mcause/mtval/mie/mstatus`）
+- 用户态切换（`mstatus.MPP` 等）
 
-// 写入控制状态寄存器
-#[inline(always)]
-pub fn write_csr(csr: usize, value: usize) {
-    unsafe {
-        asm!("csrw {}, {}", const csr, in(reg) value);
-    }
-}
-
-// 读取mstatus寄存器
-pub fn read_mstatus() -> usize {
-    read_csr(MSTATUS)
-}
-
-// 写入mstatus寄存器
-pub fn write_mstatus(value: usize) {
-    write_csr(MSTATUS, value);
-}
-
-// 读取mepc寄存器
-pub fn read_mepc() -> usize {
-    read_csr(MEPC)
-}
-
-// 写入mepc寄存器
-pub fn write_mepc(value: usize) {
-    write_csr(MEPC, value);
-}
-
-// 读取mcause寄存器
-pub fn read_mcause() -> usize {
-    read_csr(MCAUSE)
-}
-
-// 读取mtval寄存器
-pub fn read_mtval() -> usize {
-    read_csr(MTVAL)
-}
-
-// 读取mie寄存器
-pub fn read_mie() -> usize {
-    read_csr(MIE)
-}
-
-// 写入mie寄存器
-pub fn write_mie(value: usize) {
-    write_csr(MIE, value);
-}
-
-// 读取mtvec寄存器
-pub fn read_mtvec() -> usize {
-    read_csr(MTVEC)
-}
-
-// 写入mtvec寄存器
-pub fn write_mtvec(value: usize) {
-    write_csr(MTVEC, value);
-}
-
-// 读取mpp位
-pub fn read_mpp() -> usize {
-    (read_mstatus() >> 11) & 0x3
-}
-
-// 写入mpp位
-pub fn write_mpp(value: usize) {
-    let mstatus = read_mstatus();
-    let new_mstatus = (mstatus & !(0x3 << 11)) | ((value & 0x3) << 11);
-    write_mstatus(new_mstatus);
-}
-
-// 写入mie全局中断使能
-pub fn write_mie_global(enable: bool) {
-    let mstatus = read_mstatus();
-    let new_mstatus = if enable {
-        mstatus | (1 << 3)  // 设置MIE位
-    } else {
-        mstatus & !(1 << 3) // 清除MIE位
-    };
-    write_mstatus(new_mstatus);
-}
-
-// 异常和中断代码
-pub const EXCEPTION_INSTRUCTION_ADDRESS_MISALIGNED: usize = 0;
-pub const EXCEPTION_INSTRUCTION_ACCESS_FAULT: usize = 1;
-pub const EXCEPTION_ILLEGAL_INSTRUCTION: usize = 2;
-pub const EXCEPTION_BREAKPOINT: usize = 3;
-pub const EXCEPTION_LOAD_ADDRESS_MISALIGNED: usize = 4;
-pub const EXCEPTION_LOAD_ACCESS_FAULT: usize = 5;
-pub const EXCEPTION_STORE_AMO_ADDRESS_MISALIGNED: usize = 6;
-pub const EXCEPTION_STORE_AMO_ACCESS_FAULT: usize = 7;
-pub const EXCEPTION_ECALL_FROM_U_MODE: usize = 8;
-pub const EXCEPTION_ECALL_FROM_S_MODE: usize = 9;
-pub const EXCEPTION_ECALL_FROM_M_MODE: usize = 11;
-pub const EXCEPTION_INSTRUCTION_PAGE_FAULT: usize = 12;
-pub const EXCEPTION_LOAD_PAGE_FAULT: usize = 13;
-pub const EXCEPTION_STORE_AMO_PAGE_FAULT: usize = 15;
-
-pub const INTERRUPT_SOFTWARE: usize = 3;
-pub const INTERRUPT_TIMER: usize = 7;
-pub const INTERRUPT_EXTERNAL: usize = 11;
-```
+详细解释请阅读第 02 章：[RISC-V架构基础](./02_riscv_basics.md)、[寄存器操作](./02_registers.md)、[控制状态寄存器](./02_csr.md)。
 
 ## 通用类型 (src/common/types.rs)
 
@@ -226,15 +122,15 @@ pub trait ToString {
 
 impl ToString for usize {
     fn to_string(&self) -> &'static str {
-        // 简化实现，返回固定字符串
-        "usize"
+        // 简化实现：目前返回占位字符串
+        "123"
     }
 }
 
 impl ToString for u32 {
     fn to_string(&self) -> &'static str {
-        // 简化实现，返回固定字符串
-        "u32"
+        // 简化实现：目前返回占位字符串
+        "123"
     }
 }
 
@@ -269,8 +165,8 @@ pub struct Uart {
 }
 
 impl Uart {
-    pub const fn new(base: usize) -> Self {
-        Self { base }
+    pub const fn new() -> Self {
+        Self { base: UART_BASE }
     }
 
     // 初始化UART
@@ -305,7 +201,7 @@ impl Uart {
 }
 
 // 全局UART实例
-pub static UART: Uart = Uart::new(UART_BASE);
+pub static UART: Uart = Uart::new();
 
 // 便捷函数
 pub fn print(s: &str) {
@@ -314,7 +210,7 @@ pub fn print(s: &str) {
 
 pub fn println(s: &str) {
     UART.put_str(s);
-    UART.put_str("\n");
+    UART.put_char(b'\n');
 }
 
 pub fn put_char(c: u8) {
@@ -326,26 +222,26 @@ pub fn put_str(s: &str) {
 }
 ```
 
-## 内核初始化 (src/kernel/init.rs)
+更完整的 UART 原理与驱动实现请阅读第 03 章：[UART原理](./03_uart_principle.md)、[串口通信](./03_serial_communication.md)、[驱动实现](./03_uart_driver.md)。
+
+## 内核初始化 (src/kernel/mod.rs)
 
 ```rust
-// 内核初始化
-
 use crate::drivers::uart;
 
 pub fn init() {
     // 初始化UART
     uart::UART.init();
-    
+
     // 输出欢迎信息
-    uart::println("Welcome to OS in 1000 Lines!");
     uart::println("Hello, Rust OS!");
-    
-    // 内核主循环
-    loop {
-        uart::println("Welcome to OS in 1000 Lines!");
-        uart::println("Hello, Rust OS!");
-    }
+    uart::println("Welcome to OS in 1000 Lines!");
+
+    // 后续会逐步初始化更多子系统：
+    // - 异常/中断
+    // - 内存分配
+    // - 进程/调度
+    // - 分页/用户态/系统调用/磁盘/文件系统/应用等
 }
 ```
 
@@ -358,44 +254,41 @@ pub mod riscv;
 
 ### src/common/mod.rs
 ```rust
+pub mod string;
 pub mod types;
 ```
 
 ### src/drivers/mod.rs
 ```rust
+pub mod disk;
 pub mod uart;
 ```
 
 ### src/kernel/mod.rs
 ```rust
-pub mod init;
-
-pub fn init() {
-    init::init();
-}
+pub mod conclusion;
+pub mod exception;
+pub mod memory;
+pub mod paging;
+pub mod process;
+pub mod syscall;
+pub mod usermode;
 ```
 
 ## 构建和运行
 
-### 1. 构建内核
+推荐使用 Makefile 或脚本：
+
 ```bash
-cargo build --release
+make build
+make run
 ```
 
-### 2. 生成二进制文件
-```bash
-rust-objcopy --strip-all target/riscv64gc-unknown-none-elf/release/kernel -O binary target/riscv64gc-unknown-none-elf/release/kernel.stripped
-```
+或：
 
-### 3. 运行内核
 ```bash
-qemu-system-riscv64 \
-    -machine virt \
-    -cpu rv64 \
-    -m 128M \
-    -smp 1 \
-    -nographic \
-    -kernel target/riscv64gc-unknown-none-elf/release/kernel.stripped
+./build.sh
+./run.sh
 ```
 
 ## 预期输出
@@ -403,12 +296,9 @@ qemu-system-riscv64 \
 运行成功后，你应该看到：
 
 ```
-Welcome to OS in 1000 Lines!
 Hello, Rust OS!
 Welcome to OS in 1000 Lines!
-Hello, Rust OS!
-Welcome to OS in 1000 Lines!
-Hello, Rust OS!
+Exception handling initialized
 ...
 ```
 

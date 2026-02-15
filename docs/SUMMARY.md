@@ -5,6 +5,7 @@
 # 第01章：入门
 
 - [环境设置](01_environment_setup.md)
+- [项目结构](01_project_structure.md)
 - [第一个内核](01_first_kernel.md)
 
 # 第02章：RISC-V 101
