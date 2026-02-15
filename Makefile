@@ -18,7 +18,6 @@ QEMU_CPU = rv64
 QEMU_MEMORY = 128M
 QEMU_SMP = 1
 QEMU_DISPLAY = -nographic
-QEMU_MONITOR = -monitor stdio
 
 # 默认目标
 .PHONY: all build run clean check fmt clippy help
@@ -45,7 +44,6 @@ run: build
 		-m $(QEMU_MEMORY) \
 		-smp $(QEMU_SMP) \
 		$(QEMU_DISPLAY) \
-		$(QEMU_MONITOR) \
 		-kernel $(KERNEL_BIN_STRIPPED)
 
 # 调试模式运行
@@ -57,7 +55,6 @@ debug: build
 		-m $(QEMU_MEMORY) \
 		-smp $(QEMU_SMP) \
 		$(QEMU_DISPLAY) \
-		$(QEMU_MONITOR) \
 		-s -S \
 		-kernel $(KERNEL_BIN_STRIPPED)
 
@@ -105,7 +102,6 @@ run-with-disk: build disk
 		-m $(QEMU_MEMORY) \
 		-smp $(QEMU_SMP) \
 		$(QEMU_DISPLAY) \
-		$(QEMU_MONITOR) \
 		-drive file=disk.img,format=raw,id=hd0 \
 		-device virtio-blk-device,drive=hd0 \
 		-kernel $(KERNEL_BIN_STRIPPED)

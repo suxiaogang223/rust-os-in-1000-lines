@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 `src/main.rs` is the boot entry, and `src/lib.rs` wires all modules. Core kernel logic lives in `src/kernel/` (exceptions, memory, paging, process, syscalls, user mode). Device code is in `src/drivers/` (`uart.rs`, `disk.rs`). Architecture-specific code is in `src/arch/` (RISC-V), shared helpers are in `src/common/`, filesystem code is in `src/fs/`, and user program examples are in `src/user/`.
 
-Top-level build/runtime assets include `linker.ld`, `.cargo/config.toml`, and helper scripts (`build.sh`, `run.sh`, `debug.sh`, `test.sh`). Tutorial content is in `docs/` and built with mdBook to `docs/book/`.
+Top-level build/runtime assets include `Makefile`, `linker.ld`, `.cargo/config.toml`, and `test.sh`. Tutorial content is in `docs/` and built with mdBook to `docs/book/`.
 
 ## Build, Test, and Development Commands
 - `make install-toolchain`: installs the RISC-V target and required Rust components.

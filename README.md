@@ -159,7 +159,7 @@ sudo apt install gcc-riscv64-unknown-elf
 
 #### 2. 构建和运行
 
-**使用Makefile (推荐):**
+统一通过 `Makefile` 管理构建与运行（推荐）：
 ```bash
 # 安装工具链
 make install-toolchain
@@ -175,18 +175,6 @@ make debug
 
 # 清理
 make clean
-```
-
-**使用脚本:**
-```bash
-# 构建
-./build.sh
-
-# 运行
-./run.sh
-
-# 调试
-./debug.sh
 ```
 
 **手动构建:**
